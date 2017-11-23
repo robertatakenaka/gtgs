@@ -43,3 +43,49 @@ class UserListView(LoginRequiredMixin, ListView):
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+    def get_queryset(self):
+        status = int(self.kwargs.get('status', 0))
+        if status == 0:
+            return User.objects.all().order_by('email')
+
+        is_checked = True
+        is_checked_by_admin = True
+        if status == 1:
+            is_checked = False
+            is_checked_by_admin = False
+        elif status == 2:
+            is_checked = True
+            is_checked_by_admin = False
+        return User.objects.filter(
+            is_checked=is_checked,
+            is_checked_by_admin=is_checked_by_admin
+            ).order_by('email')
+
+
+class UserDatesUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'users/user_form_dates.html'
+    fields = [
+        'birthdate',
+        'anniversary',
+        'is_checked',
+        'is_checked_by_admin',
+        'is_active',
+        'is_staff',
+        'is_superuser']
+
+    # we already imported User in the view code above, remember?
+    model = User
+
+    # send the user back to their own page after a successful update
+    def get_redirect_url(self):
+        return reverse('users:detail',
+                       kwargs={'username': self.kwargs['username']})
+
+    def get_success_url(self):
+        return reverse('users:detail',
+                       kwargs={'username': self.kwargs['username']})
+
+    def get_object(self):
+        # Only get the User record for the user making the request
+        return User.objects.get(username=self.kwargs['username'])
