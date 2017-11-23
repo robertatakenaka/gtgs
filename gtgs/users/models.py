@@ -18,7 +18,7 @@ class User(AbstractUser):
     birthdate = models.DateField(_('Birthdate (DD/MM/AAAA)'), default=now)
     anniversary = models.DateField('Data de admissão (DD/MM/AAAA)', default=now)
     photo = models.ImageField(_('Photo'), default=settings.MEDIA_ROOT +'/photo.png')
-    is_checked = models.BooleanField(_('Data is checked'), default=False)
+    is_checked = models.BooleanField(_('Confirmo que meus dados estão atualizados'), default=False)
 
     def __str__(self):
         return self.username
@@ -26,14 +26,15 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})
 
-    def save(self):
-        super(AbstractUser, self).save()
+    def save(self, *args, **kwargs):
         self.resize_photo()
+        super(AbstractUser, self).save(*args, **kwargs)
 
     def resize_photo(self):
         if self.photo:
             image = Image.open(self.photo)
             (width, height) = image.size
             size = (100, 100)
-            image = image.resize(size, Image.ANTIALIAS)
-            image.save(self.photo.path)
+            if image.size != size:
+                image = image.resize(size, Image.ANTIALIAS)
+                image.save(self.photo.path)
