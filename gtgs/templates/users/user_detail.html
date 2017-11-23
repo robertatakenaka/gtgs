@@ -10,8 +10,20 @@
     <div class="col-sm-12">
 
       <h2>{{ object.username }}</h2>
-      {% if object.name %}
-        <p>{{ object.name }}</p>
+      {% if object.birthdate %}
+        <p><em>Data de nascimento:</em> {{ object.birthdate }}</p>
+      {% endif %}
+      {% if object.anniversary %}
+        <p><em>Data de admissão:</em> {{ object.anniversary }}</p>
+      {% endif %}
+      {% if object.display_years %}
+        <p><em>Anos: </em>{{ object.display_years }}</p>
+      {% endif %}
+      {% if object.photo %}
+      {% if object.photo.url %}
+        <p>File uploaded at: <a href="{{ object.photo.url }}">{{ object.photo.url }}</a></p>
+         <img src="{{ object.photo.url }}" width="10%">
+      {% endif %}
       {% endif %}
     </div>
   </div>
@@ -21,8 +33,10 @@
 <div class="row">
 
   <div class="col-sm-12">
-    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
-    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
+    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">Editar dados</a>
+    <!-- 
+      <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
+    -->
     <!-- Your Stuff: Custom user template urls -->
   </div>
 

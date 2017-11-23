@@ -1,1 +1,23 @@
 {% extends "base.html" %}
+{% block content %}
+  
+<div>
+    <ul>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:list' %}">Aniversariantes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:list' %}">Tempo de SciELO</a>
+        </li>
+        {% if request.user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:list' %}">Gestão dos Colaboradores</a>
+            </li>
+            <!--li class="nav-item">
+              <a class="nav-link" href="{% url 'about' %}">Datas (incompleto)</a>
+            </li-->
+        {% endif %}    
+    </ul>
+</div>
+{% endblock %}
