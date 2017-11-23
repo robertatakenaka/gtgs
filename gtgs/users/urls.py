@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(
-        regex=r'^$',
+        regex=r'^~list/(?P<status>[\w.@+-]+)/$',
         view=views.UserListView.as_view(),
         name='list'
     ),
@@ -22,5 +22,10 @@ urlpatterns = [
         regex=r'^~update/$',
         view=views.UserUpdateView.as_view(),
         name='update'
+    ),
+    url(
+        regex=r'^~update_dates/(?P<username>[\w.@+-]+)/$',
+        view=views.UserDatesUpdateView.as_view(),
+        name='update_dates'
     ),
 ]

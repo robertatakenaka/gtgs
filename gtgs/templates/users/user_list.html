@@ -4,13 +4,49 @@
 
 {% block content %}
 <div class="container">
-  <h2>Users</h2>
-
+  <h3>Colaboradores</h3>
   <div class="list-group">
     {% for user in user_list %}
-      <a href="{% url 'users:detail' user.username %}" class="list-group-item">
-        <h4 class="list-group-item-heading">{{ user.username }}</h4>
-      </a>
+    <div class="list-group-item">
+        <div class="list-group-item-heading">
+          <p>
+          <a href="{% url 'users:update_dates' user.username %}">
+            {% if user.photo %}
+              {% if user.photo.url %}
+                 <img src="{{ user.photo.url }}" width="10%" align="center">
+              {% endif %}
+            {% endif %}
+          </a>
+        </p>
+        <p>
+          <a href="{% url 'users:update_dates' user.username %}"><span  padding="50px"><em>{{ user.username }}</em></span></a>
+          {% if user.is_staff %}
+            [adm]
+          {% endif %}
+          (
+          {% if not user.is_active %}in{% endif %}ativo |
+          <span style="background-color: 
+            {% if user.status == 'valid' %}
+                green
+            {% else %}
+                {% if user.status == 'pending' %}
+                    orange
+                {% else %}
+                    red
+                {% endif %}
+            {% endif %}
+          ">
+            {{user.status}}
+          </span>
+          )
+        </p>
+        </div>
+        
+        <ul>
+            <li>Data de nascimento: {{user.birthdate}}</li>
+            <li>Data de admissão: {{user.anniversary}} ({{user.display_years}})</li>
+        </ul>
+    </div>
     {% endfor %}
   </div>
 </div>
