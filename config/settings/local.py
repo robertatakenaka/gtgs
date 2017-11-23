@@ -44,7 +44,7 @@ CACHES = {
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
 INSTALLED_APPS += ['debug_toolbar', ]
 
-INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', ]
+INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', '0.0.0.0']
 
 
 import socket
@@ -76,3 +76,4 @@ CELERY_ALWAYS_EAGER = True
 
 # Your local stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['example.com', '0.0.0.0'])
