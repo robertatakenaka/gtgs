@@ -11,6 +11,69 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 
+SQL_MONTH = 'MONTH({})'
+SQL_DAY = 'DAY({})'
+
+SQL_MONTH = 'EXTRACT(MONTH FROM {})'
+SQL_DAY = 'EXTRACT(DAY FROM {})'
+
+
+def parse_month_day(month_day=None):
+    m = 0
+    d = 0
+    if month_day is not None:
+        if month_day == '99':
+            month_day = datetime.now().isoformat()[5:7]
+        if '-' in month_day:
+            m, d = month_day.split('-')
+            m = int(m)
+            d = int(d)
+        else:
+            d = 0
+            m = int(month_day)
+    return m, d
+
+
+def select_by_month_day(datename, m, d):
+    if d + m == 0:
+        return User.objects.filter(is_checked_by_admin=True)
+    if datename == 'birthdate':
+        if d == 0:
+            return User.objects.filter(is_checked_by_admin=True, birthdate__month=m)
+        return User.objects.filter(is_checked_by_admin=True, birthdate__month=m, birthdate__day=d)
+    elif datename == 'anniversary':
+        if d == 0:
+            return User.objects.filter(is_checked_by_admin=True, anniversary__month=m)
+        return User.objects.filter(is_checked_by_admin=True, anniversary__month=m, anniversary__day=d)
+
+
+def user_ordered_by_month_day(datename, month_day=None):
+    month, day = parse_month_day(month_day)
+    selection = select_by_month_day(datename, month, day)
+    return selection.extra(
+            select={'month': SQL_MONTH.format(datename),
+                    'day': SQL_DAY.format(datename)},
+            order_by=['month', 'day']
+            )
+
+
+def get_months():
+    birthday = []
+    anniversary = []
+    a_users = []
+    b_users = []
+    for user in User.objects.filter(is_checked_by_admin=True).order_by('birthdate', 'anniversary'):
+        month = user.birthdate.isoformat()[5:7]
+        if month not in birthday:
+            birthday.append(month)
+            b_users.append(user.id)
+        month = user.anniversary.isoformat()[5:7]
+        if month not in anniversary:
+            anniversary.append(month)
+            a_users.append(user.id)
+    return birthday, anniversary
+
+
 @python_2_unicode_compatible
 class User(AbstractUser):
 
@@ -28,6 +91,9 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})
+
+    def fullname(self):
+        return self.email[:self.email.find('@')].replace('.', ' ').title()
 
     def status(self):
         if self.is_checked and self.is_checked_by_admin:

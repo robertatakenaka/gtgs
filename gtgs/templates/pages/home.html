@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
   
-<h3>Aniversariantes</h3>
-<h3>Tempo de SciELO</h3>
+<div>
+    <ul>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:anniversary' %}">Tempo de SciELO</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:birthday' %}">Aniversariantes</a>
+        </li>
+    </ul>
+</div>
 
 {% if request.user.is_superuser %}
   <h3>Colaboradores</h3>
@@ -17,7 +25,6 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'users:list' status=2 %}">Pendentes de confirmação do administrador</a>
           </li>
-          
       </ul>
   </div>
 {% endif %}

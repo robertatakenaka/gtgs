@@ -4,6 +4,7 @@ from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import User
+from .models import user_ordered_by_month_day
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -61,6 +62,30 @@ class UserListView(LoginRequiredMixin, ListView):
             is_checked=is_checked,
             is_checked_by_admin=is_checked_by_admin
             ).order_by('email')
+
+
+class UserBirthdayListView(ListView):
+    template_name = 'users/birthday_list.html'
+    model = User
+    # These next two lines tell the view to index lookups by username
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+    def get_queryset(self):
+        month = self.kwargs.get('month')
+        return user_ordered_by_month_day('birthdate', month)
+
+
+class UserAnniversaryListView(ListView):
+    template_name = 'users/anniversary_list.html'
+    model = User
+    # These next two lines tell the view to index lookups by username
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+    def get_queryset(self):
+        month = self.kwargs.get('month')
+        return user_ordered_by_month_day('anniversary', month)
 
 
 class UserDatesUpdateView(LoginRequiredMixin, UpdateView):

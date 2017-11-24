@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Aniversariantes{% endblock %}
+
+{% block content %}
+  <h3>Aniversariantes</h3>
+
+  <div class="list-group">
+    {% for user in user_list %}
+        <div class="list-group-item">
+            <div class="list-group-item-heading">
+              <p>
+                {% if user.photo %}
+                  {% if user.photo.url %}
+                     <img src="{{ user.photo.url }}" width="10%" align="center">
+                  {% endif %}
+                {% endif %}
+                <br/>
+                {{ user.fullname }}
+            </p>
+            <ul>
+                <li>{{user.birthdate|date:"d F"}}</li>
+            </ul>
+        </div>
+    {% endfor %}
+  </div>
+{% endblock content %}
