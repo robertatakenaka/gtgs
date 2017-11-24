@@ -36,7 +36,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         # Only get the User record for the user making the request
-        return User.objects.get(username=self.request.user.username)
+        user = User.objects.get(username=self.request.user.username)
+        if user.is_checked_by_admin:
+            self.fields = ['photo']
+        return user
 
 
 class UserListView(LoginRequiredMixin, ListView):
