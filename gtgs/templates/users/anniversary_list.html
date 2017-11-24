@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Tempo de SciELO{% endblock %}
+
+{% block content %}
+  <h3>Tempo de SciELO</h3>
+  <div class="list-group">
+      {% for user in user_list %}
+          <div class="list-group-item">
+              <div class="list-group-item-heading">
+                <p>
+                  {% if user.photo %}
+                    {% if user.photo.url %}
+                       <img src="{{ user.photo.url }}" width="10%" align="center">
+                    {% endif %}
+                  {% endif %}
+                  <br/>
+                {{ user.fullname }}
+              </p>
+              <ul>
+                  <li>{{user.anniversary|date:"d F"}} ({{user.display_years}})</li>
+              </ul>
+          </div>
+      {% endfor %}
+  </div>
+{% endblock content %}

@@ -9,6 +9,16 @@ urlpatterns = [
         name='list'
     ),
     url(
+        regex=r'^birthday/$',
+        view=views.UserBirthdayListView.as_view(),
+        name='birthday'
+    ),
+    url(
+        regex=r'^anniversary/$',
+        view=views.UserAnniversaryListView.as_view(),
+        name='anniversary'
+    ),
+    url(
         regex=r'^~redirect/$',
         view=views.UserRedirectView.as_view(),
         name='redirect'
