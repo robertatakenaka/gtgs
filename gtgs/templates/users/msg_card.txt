@@ -1,4 +1,6 @@
-{{fullname,|linebreaks|greetings|safe}}
+{{fullname|linebreaks|safe}}
+
+{{greetings|linebreaks|safe}}
 
 -------------
 SciELO Equipe

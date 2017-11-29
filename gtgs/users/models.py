@@ -93,7 +93,10 @@ class User(AbstractUser):
         return reverse('users:detail', kwargs={'username': self.username})
 
     def fullname(self):
-        return self.email[:self.email.find('@')].replace('.', ' ').title()
+        if self.email != '':
+            return self.email[:self.email.find('@')].replace('.', ' ').title()
+        if self.username:
+            return self.username.replace('.', ' ').title()
 
     def status(self):
         if self.is_checked and self.is_checked_by_admin:
@@ -116,14 +119,23 @@ class User(AbstractUser):
         return ''
 
     def save(self, *args, **kwargs):
-        self.resize_photo()
         super(AbstractUser, self).save(*args, **kwargs)
+        self.resize_photo()
 
     def resize_photo(self):
-        if self.photo:
+        if self.photo is not None:
             image = Image.open(self.photo)
             (width, height) = image.size
-            size = (100, 100)
-            if image.size != size:
-                image = image.resize(size, Image.ANTIALIAS)
-                image.save(self.photo.path)
+            fixed_w = width
+            fixed_h = height
+            if width > 200:
+                fixed_w = 200
+                r = 200.0 / width
+                fixed_h = int(r * height)
+            else:
+                fixed_w = 200
+                r = width / 200.0 
+                fixed_h = int(r * height)
+            size = (fixed_w, fixed_h)
+            image = image.resize(size, Image.ANTIALIAS)
+            image.save(self.photo.path)

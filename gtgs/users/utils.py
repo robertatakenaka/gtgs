@@ -1,7 +1,7 @@
+from datetime import datetime
 from django.conf import settings
 from django.template import Context
 from django.template.loader import render_to_string
-from .models import User
 from .models import user_ordered_by_month_day
 from reminder.emails import send_reminder_email
 from reminder.emails import send_reminder_email_with_embedded_images
@@ -11,12 +11,11 @@ template_text = 'users/msg_card.txt'
 template_html = 'users/msg_card.html'
 
 
-def users_reminder():
-    for user in User.objects.all():
-        send_reminder_email('roberta.takenaka@scielo.org', 'user item', '?')
-        subject = 'Greetings, {}!'.format(user.username)
-        message = user.date_joined
-        send_reminder_email(user.email, subject, message)
+def send_absence_of_message(date, greetings):
+    send_reminder_email(
+        settings.EMAIL_ADMIN,
+        date + ' ' + greetings,
+        date + ' ' + greetings)
 
 
 def send_greetings(subject, greetings, user):
@@ -28,8 +27,10 @@ def send_greetings(subject, greetings, user):
                 }
             )
     images = [user.photo]
+
     html_message = render_to_string(template_html, context)
-    text_message = render_to_string(template_html, context)
+    text_message = render_to_string(template_text, context)
+
     send_reminder_email_with_embedded_images(
         settings.EMAIL_DESTINATARY,
         subject,
@@ -39,15 +40,28 @@ def send_greetings(subject, greetings, user):
 
 
 def users_remind_birthday():
-    for user in user_ordered_by_month_day('birthday', '01-01'):
-        subject = 'Feliz aniversário, {}!'.format(user.username)
-        greetings = 'Feliz aniversário!'
-        send_greetings(subject, greetings, user)
+    month_day = '06-07'
+    month_day = datetime.now().isoformat()[5:10]
+    date_type = 'birthdate'
+    users = user_ordered_by_month_day('birthdate', month_day)
+    if len(users) == 0:
+        send_absence_of_message(month_day, date_type)
+    else:
+        for user in users:
+            subject = 'Feliz aniversário, {}!'.format(user.fullname())
+            greetings = 'Feliz aniversário!'
+            send_greetings(subject, greetings, user)
 
 
 def users_remind_anniversary():
-    for user in user_ordered_by_month_day('birthday', '01-01'):
-        subject = '{}, parabéns por {}!'.format(user.username, user.display_years)
-        greetings = 'Parabéns por {}!'.format(user.display_years)
-        send_greetings(subject, greetings, user)
-
+    month_day = '06-01'
+    month_day = datetime.now().isoformat()[5:10]
+    date_type = 'anniversary'
+    users = user_ordered_by_month_day('anniversary', month_day)
+    if len(users) == 0:
+        send_absence_of_message(month_day, date_type)
+    else:
+        for user in users:
+            subject = '{}, parabéns por {}!'.format(user.fullname(), user.display_years())
+            greetings = 'Parabéns por {}!'.format(user.display_years())
+            send_greetings(subject, greetings, user)

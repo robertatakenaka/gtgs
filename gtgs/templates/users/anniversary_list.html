@@ -11,7 +11,7 @@
                 <p>
                   {% if user.photo %}
                     {% if user.photo.url %}
-                       <img src="{{ user.photo.url }}" width="10%" align="center">
+                       <img src="{{ user.photo.url }}">
                     {% endif %}
                   {% endif %}
                   <br/>
@@ -20,6 +20,7 @@
               <ul>
                   <li>{{user.anniversary|date:"d F"}} ({{user.display_years}})</li>
               </ul>
+            </div>
           </div>
       {% endfor %}
   </div>

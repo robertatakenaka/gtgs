@@ -91,13 +91,13 @@ class UserAnniversaryListView(ListView):
 class UserDatesUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'users/user_form_dates.html'
     fields = [
+        'photo',
         'birthdate',
         'anniversary',
         'is_checked',
         'is_checked_by_admin',
         'is_active',
-        'is_staff',
-        'is_superuser']
+        ]
 
     # we already imported User in the view code above, remember?
     model = User

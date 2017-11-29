@@ -3,7 +3,7 @@ from django.core.mail import EmailMessage
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import render_to_string
-from email.MIMEImage import MIMEImage
+from email.mime.image import MIMEImage
 
 
 def send_reminder_email(email_to, subject, message):
@@ -28,15 +28,14 @@ def send_reminder_email_with_embedded_images(
     images = images or []
     if not isinstance(email_to, list):
         email_to = [email_to]
+
     msg = EmailMultiAlternatives(
             subject,
             text_message,
             settings.DEFAULT_FROM_EMAIL,
             email_to)
-
     msg.attach_alternative(html_message, "text/html")
-
-    msg.mixed_subtype = 'related'
+    msg.mixed_subtype = 'html'
 
     for f in images:
         fp = open(f.path, 'rb')
