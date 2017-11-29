@@ -18,6 +18,8 @@ services:
     environment:
       - POSTGRES_USER=gtgs
       - USE_DOCKER=yes
+      - EMAIL_DESTINATARY=roberta.takenaka@scielo.org
+      - EMAIL_ADMIN=roberta.takenaka@scielo.org
     ports:
       - "8000:8000"
     command: /start.sh

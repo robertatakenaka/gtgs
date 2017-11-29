@@ -1,0 +1,6 @@
+{{fullname|linebreaks|safe}}
+
+{{greetings|linebreaks|safe}}
+
+-------------
+SciELO Equipe

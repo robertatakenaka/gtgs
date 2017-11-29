@@ -1,0 +1,6 @@
+{{date|linebreaks|safe}}
+
+{{greetings|linebreaks|safe}}
+
+-------------
+gtgs

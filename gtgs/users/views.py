@@ -24,7 +24,11 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
 
-    fields = ['photo', 'birthdate', 'anniversary', 'is_checked']
+    fields = [
+        'photo',
+        'birthdate',
+        'is_checked',
+        ]
 
     # we already imported User in the view code above, remember?
     model = User
@@ -94,13 +98,15 @@ class UserAnniversaryListView(ListView):
 class UserDatesUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'users/user_form_dates.html'
     fields = [
+        'photo',
         'birthdate',
+        'birthdate_alert',
         'anniversary',
+        'anniversary_alert',
         'is_checked',
         'is_checked_by_admin',
         'is_active',
-        'is_staff',
-        'is_superuser']
+        ]
 
     # we already imported User in the view code above, remember?
     model = User
