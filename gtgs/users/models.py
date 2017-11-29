@@ -36,15 +36,17 @@ def parse_month_day(month_day=None):
 
 def select_by_month_day(datename, m, d):
     if d + m == 0:
-        return User.objects.filter(is_checked_by_admin=True)
+        if datename == 'birthdate':
+            return User.objects.filter(is_checked_by_admin=True, birthdate_alert=True)
+        return User.objects.filter(is_checked_by_admin=True, anniversary_alert=True)
     if datename == 'birthdate':
         if d == 0:
-            return User.objects.filter(is_checked_by_admin=True, birthdate__month=m)
-        return User.objects.filter(is_checked_by_admin=True, birthdate__month=m, birthdate__day=d)
+            return User.objects.filter(is_checked_by_admin=True, birthdate_alert=True, birthdate__month=m)
+        return User.objects.filter(is_checked_by_admin=True, birthdate_alert=True, birthdate__month=m, birthdate__day=d)
     elif datename == 'anniversary':
         if d == 0:
-            return User.objects.filter(is_checked_by_admin=True, anniversary__month=m)
-        return User.objects.filter(is_checked_by_admin=True, anniversary__month=m, anniversary__day=d)
+            return User.objects.filter(is_checked_by_admin=True, anniversary_alert=True, anniversary__month=m)
+        return User.objects.filter(is_checked_by_admin=True, anniversary_alert=True, anniversary__month=m, anniversary__day=d)
 
 
 def user_ordered_by_month_day(datename, month_day=None):
@@ -57,34 +59,19 @@ def user_ordered_by_month_day(datename, month_day=None):
             )
 
 
-def get_months():
-    birthday = []
-    anniversary = []
-    a_users = []
-    b_users = []
-    for user in User.objects.filter(is_checked_by_admin=True).order_by('birthdate', 'anniversary'):
-        month = user.birthdate.isoformat()[5:7]
-        if month not in birthday:
-            birthday.append(month)
-            b_users.append(user.id)
-        month = user.anniversary.isoformat()[5:7]
-        if month not in anniversary:
-            anniversary.append(month)
-            a_users.append(user.id)
-    return birthday, anniversary
-
-
 @python_2_unicode_compatible
 class User(AbstractUser):
 
     # First Name and Last Name do not cover name patterns
     # around the globe.
     name = models.CharField(_('Name of User'), blank=True, max_length=255)
-    birthdate = models.DateField(_('Birthdate (DD/MM/AAAA)'), default=now)
+    birthdate = models.DateField(_('Data de nascimento (DD/MM/AAAA)'), default=now)
     anniversary = models.DateField('Data de admissão (DD/MM/AAAA)', default=now)
-    photo = models.ImageField(_('Photo'), default=settings.MEDIA_ROOT +'/photo.png')
-    is_checked = models.BooleanField(_('Confirmo que meus dados estão atualizados'), default=False)
+    photo = models.ImageField(_('Photo'), default=settings.MEDIA_ROOT +'/perfil.png')
+    is_checked = models.BooleanField(_('Confirmo que estes dados estão atualizados'), default=False)
     is_checked_by_admin = models.BooleanField(_('Validado'), default=False)
+    anniversary_alert = models.BooleanField(_('Alertar tempo de SciELO'), default=True)
+    birthdate_alert = models.BooleanField(_('Alertar aniversário'), default=True)
 
     def __str__(self):
         return self.username
@@ -128,14 +115,9 @@ class User(AbstractUser):
             (width, height) = image.size
             fixed_w = width
             fixed_h = height
-            if width > 200:
-                fixed_w = 200
-                r = 200.0 / width
-                fixed_h = int(r * height)
-            else:
-                fixed_w = 200
-                r = width / 200.0 
-                fixed_h = int(r * height)
+            fixed_w = 150
+            r = 150.0 / width
+            fixed_h = int(r * height)
             size = (fixed_w, fixed_h)
             image = image.resize(size, Image.ANTIALIAS)
             image.save(self.photo.path)

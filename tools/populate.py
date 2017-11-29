@@ -48,6 +48,8 @@ def format_register(id, username, birthdate, anniversary, photo):
     fields['name'] = ''
     fields['birthdate'] = birthdate.isoformat()[:10]
     fields['anniversary'] = anniversary.isoformat()[:10]
+    fields['birthdate_alert'] = True
+    fields['anniversary_alert'] = True
     fields['photo'] = photo
     fields['is_checked'] = False
     fields['is_checked_by_admin'] = False
@@ -118,6 +120,8 @@ def format_data(username, u_data):
     if os.path.isfile(f):
         d['photo'] = f
     d['photo'] = u_data[1]
+    d['photo'] = 'perfil.png'
+
     return d
 
 
