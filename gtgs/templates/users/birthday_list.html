@@ -1,28 +1,27 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% block title %}Aniversariantes{% endblock %}
+{% block title %}SciELO Team{% endblock %}
 
 {% block content %}
   <h3>Aniversariantes</h3>
 
-  <div class="list-group">
-    {% for user in user_list %}
-        <div class="list-group-item">
-            <div class="list-group-item-heading">
-              <p>
-                {% if user.photo %}
-                  {% if user.photo.url %}
-                     <img src="{{ user.photo.url }}" >
-                  {% endif %}
-                {% endif %}
-                <br/>
-                {{ user.fullname }}
-            </p>
-            <ul>
-                <li>{{user.birthdate|date:"d F"}}</li>
-            </ul>
+  <div class="container">
+    <div class="row">
+      
+      {% for user in user_list %}
+        <div class="card text-center" style="width: 12rem;">
+          <div class="card-body">
+            <img class="card-img-top rounded-circle" src="{{ user.photo.url }}" alt="{{ user.username }}">
+            <div >
+              <h6 class="card-title">{{user.birthdate|date:"F d"}} </h6>
+              <p class="card-text">
+                {{ user.fullname }}               
+              </p>
+            </div>
           </div>
         </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
   </div>
+
 {% endblock content %}

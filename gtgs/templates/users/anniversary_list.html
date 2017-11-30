@@ -1,27 +1,30 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% block title %}Tempo de SciELO{% endblock %}
+{% block title %}SciELO Team{% endblock %}
 
 {% block content %}
   <h3>Tempo de SciELO</h3>
-  <div class="list-group">
+
+  <div class="container">
+    <div class="row">
       {% for user in user_list %}
-          <div class="list-group-item">
-              <div class="list-group-item-heading">
-                <p>
-                  {% if user.photo %}
-                    {% if user.photo.url %}
-                       <img src="{{ user.photo.url }}">
-                    {% endif %}
-                  {% endif %}
-                  <br/>
-                {{ user.fullname }}
+        <div class="card text-center" style="width: 12rem;">
+          <div class="card-body">
+            <img class="card-img-top rounded-circle" src="{{ user.photo.url }}" alt="{{ user.username }}">
+            <div >
+              <h6 class="card-title">{{user.anniversary|date:"F d"}} </h6>
+              <p class="card-text">
+              <em>{{user.display_years}}</em>
               </p>
-              <ul>
-                  <li>{{user.anniversary|date:"d F"}} ({{user.display_years}})</li>
-              </ul>
+              <p class="card-text">
+                {{ user.fullname }}               
+              </p>
             </div>
           </div>
+        </div>
       {% endfor %}
+    </div>
   </div>
+
 {% endblock content %}
+

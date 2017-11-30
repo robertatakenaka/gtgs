@@ -10,13 +10,13 @@
 
       <h2>{{ object.username }}</h2>
       {% if object.birthdate %}
-        <p><em>Data de nascimento:</em> {{ object.birthdate }}</p>
+        <p><strong>Data de nascimento:</strong> {{ object.birthdate }}</p>
       {% endif %}
       {% if object.anniversary %}
-        <p><em>Data de admissão:</em> {{ object.anniversary }}</p>
+        <p><strong>Data de admissão:</strong> {{ object.anniversary }}</p>
       {% endif %}
       {% if object.display_years %}
-        <p><em>Anos: </em>{{ object.display_years }}</p>
+        <p><strong>Anos: </strong>{{ object.display_years }}</p>
       {% endif %}
       {% if object.photo %}
       {% if object.photo.url %}
