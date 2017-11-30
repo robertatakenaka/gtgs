@@ -17,6 +17,9 @@ SQL_DAY = 'DAY({})'
 SQL_MONTH = 'EXTRACT(MONTH FROM {})'
 SQL_DAY = 'EXTRACT(DAY FROM {})'
 
+WIDTH = 150
+HEIGHT = 165
+
 
 def parse_month_day(month_day=None):
     m = 0
@@ -67,7 +70,7 @@ class User(AbstractUser):
     name = models.CharField(_('Name of User'), blank=True, max_length=255)
     birthdate = models.DateField(_('Data de nascimento (DD/MM/AAAA)'), default=now)
     anniversary = models.DateField('Data de admissão (DD/MM/AAAA)', default=now)
-    photo = models.ImageField(_('Photo'), default=settings.MEDIA_ROOT +'/perfil.png')
+    photo = models.ImageField(_('Foto'), default=settings.MEDIA_ROOT +'/perfil.png')
     is_checked = models.BooleanField(_('Confirmo que estes dados estão atualizados'), default=False)
     is_checked_by_admin = models.BooleanField(_('Validado'), default=False)
     anniversary_alert = models.BooleanField(_('Alertar tempo de SciELO'), default=True)
@@ -80,6 +83,9 @@ class User(AbstractUser):
         return reverse('users:detail', kwargs={'username': self.username})
 
     def fullname(self):
+        if all([self.first_name, self.last_name]):
+            if self.first_name + self.last_name != '':
+                return  ' '.join([self.first_name, self.last_name])
         if self.email != '':
             return self.email[:self.email.find('@')].replace('.', ' ').title()
         if self.username:
@@ -91,6 +97,13 @@ class User(AbstractUser):
         if self.is_checked:
             return 'updated'
         return 'pending'
+
+    def registration_status(self):
+        if self.is_checked and self.is_checked_by_admin:
+            return '100'
+        if self.is_checked:
+            return '60'
+        return '30'
 
     def years(self):
         current = datetime.now().isoformat()[:4]
@@ -115,9 +128,13 @@ class User(AbstractUser):
             (width, height) = image.size
             fixed_w = width
             fixed_h = height
-            fixed_w = 150
-            r = 150.0 / width
+            fixed_w = WIDTH
+            r = float(WIDTH) / width
             fixed_h = int(r * height)
             size = (fixed_w, fixed_h)
             image = image.resize(size, Image.ANTIALIAS)
+            if fixed_h > HEIGHT:
+                y = (fixed_h - HEIGHT) // 2
+                image = image.crop((0, y, WIDTH, HEIGHT))
+
             image.save(self.photo.path)

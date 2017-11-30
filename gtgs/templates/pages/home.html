@@ -1,32 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-  
 <div>
-    <ul>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:anniversary' %}">Tempo de SciELO</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:birthday' %}">Aniversariantes</a>
-        </li>
-    </ul>
+<nav class="nav">
+  <a class="nav-link" href="{% url 'users:birthday' %}">Aniversariantes</a>
+  <a class="nav-link" href="{% url 'users:anniversary' %}">Tempo de SciELO</a>
+  {% if request.user.is_superuser %}
+  <a class="nav-link" href="{% url 'users:list' status=0 %}">Gestão dos dados dos membros da Equipe</a>
+  {% endif %}
+</nav>
 </div>
 
-{% if request.user.is_superuser %}
-  <h3>Colaboradores</h3>
-  <div>
-      <ul>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:list' status=0 %}">Todos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:list' status=1 %}">Pendentes de confirmação do usuário</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:list' status=2 %}">Pendentes de confirmação do administrador</a>
-          </li>
-      </ul>
-  </div>
-{% endif %}
 
 {% endblock %}
