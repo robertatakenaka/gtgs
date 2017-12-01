@@ -6,7 +6,7 @@
   <h5>Gestão dos dados dos membros da Equipe</h5>
 
   <div>
-    <nav class="navbar navbar-light" style="background-color: #FBCFCF;">
+    <nav class="navbar navbar-light" style="background-color: #C4BDB6;">
       <!-- Navbar content -->
       <ul class="nav justify-content-center">
         <li class="active">
@@ -27,39 +27,40 @@
       {% for user in user_list %}
         <div class="card-group">
           <div class="card text-center" style="width:15rem;">
+              <h6 class="card-header">
+                  <a href="{% url 'users:update_dates' user.username %}">
+                  {{ user.username }}
+                  </a>
+              </h6>
+              <div class="card-text">
+                {% if user.is_staff %}
+                  [adm]
+                {% endif %}  
+                {% if user.is_active %}
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: {{user.registration_status}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"> {{user.registration_status}}% preenchido</div>
+                  </div>
+                {% else %}
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-alert" role="progressbar" style="width: {{user.registration_status}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{{user.registration_status}}% preenchido </div>
+                  </div>
+                {% endif %}
+              </div>
               <a href="{% url 'users:update_dates' user.username %}">
                 <img class="card-img rounded-circle" src="{{ user.photo.url }}" alt="">
               </a>
               <div class="card-body">
-                <h6 class="card-title">
-                  <a href="{% url 'users:update_dates' user.username %}">
-                  {{ user.username }}
-                  </a>
-                </h6>
-                <div class="card-text">
-                  {% if user.is_staff %}
-                    [adm]
-                  {% endif %}  
-                  {% if user.is_active %}
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: {{user.registration_status}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"> {{user.registration_status}}% preenchido</div>
-                    </div>
-                  {% else %}
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-striped bg-alert" role="progressbar" style="width: {{user.registration_status}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{{user.registration_status}}% preenchido </div>
-                    </div>
-                  {% endif %}
-                </div>
-                <div class="card-footer">
+                <p class="card-text-bottom">
                   <strong>Nascimento:</strong><br/>{{user.birthdate|date:"d/F/Y"}}
                   {% if user.anniversary_alert %}<br/>
                   <strong>Admissão:</strong><br/>
                   {{user.anniversary|date:"d/F/Y"}}<hr/>
                   <strong>{{user.display_years}}</strong>
-                  {% endif %}                  
-                </div>
+                  {% endif %}  
+                </p>
                 
               </div>
+              
             </div>
           </div>
       {% endfor %}

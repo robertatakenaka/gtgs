@@ -10,7 +10,7 @@ logger = get_task_logger(__name__)
 
 
 @periodic_task(
-    run_every=crontab(minute=[10,40]),
+    run_every=crontab(hour=6),
     name="users_task_remind_birthday"
 )
 def users_task_remind_birthday():
@@ -19,7 +19,7 @@ def users_task_remind_birthday():
 
 
 @periodic_task(
-    run_every=crontab(minute=[20,50]),
+    run_every=crontab(hour=6),
     name="users_task_remind_anniversary"
 )
 def users_task_remind_anniversary():
