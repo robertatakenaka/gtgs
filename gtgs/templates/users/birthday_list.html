@@ -9,18 +9,19 @@
     <div class="row">
       
       {% for user in user_list %}
+        
         <div class="card text-center" style="width: 12rem;">
-          <div class="card-body">
+          <h5 class="card-header">{{user.birthdate|date:"F d"}}</h5>
+          <div class="card-body" style="background: url('/static/images/ballons18.png');">
             <img class="card-img-top rounded-circle" src="{{ user.photo.url }}" alt="{{ user.username }}">
-            <div >
-              <h6 class="card-title">{{user.birthdate|date:"F d"}} </h6>
-              <p class="card-text">
+              
+            
+          </div>
+          <p class="card-footer" style="color: black">
                 {{ user.fullname }}               
               </p>
-            </div>
-          </div>
         </div>
-        {% endfor %}
+      {% endfor %}
     </div>
   </div>
 

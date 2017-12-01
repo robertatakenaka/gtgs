@@ -8,19 +8,17 @@
   <div class="container">
     <div class="row">
       {% for user in user_list %}
-        <div class="card text-center" style="width: 12rem;">
-          <div class="card-body">
+        <div class="card text-center" style="width: 12rem; ">
+          <h5 class="card-header">{{user.anniversary|date:"F d"}}</h5>
+          <div class="card-body" style="background: url('/static/images/scielo2.png'); color: white;">
             <img class="card-img-top rounded-circle" src="{{ user.photo.url }}" alt="{{ user.username }}">
-            <div >
-              <h6 class="card-title">{{user.anniversary|date:"F d"}} </h6>
-              <p class="card-text">
-              <em>{{user.display_years}}</em>
-              </p>
-              <p class="card-text">
-                {{ user.fullname }}               
-              </p>
-            </div>
+            
+            
           </div>
+          <p class="card-footer">
+                {{ user.fullname }}<br/>
+ <em>{{user.display_years}}</em>
+            </p>
         </div>
       {% endfor %}
     </div>
