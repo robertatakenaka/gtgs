@@ -104,7 +104,6 @@ class UserDatesUpdateView(LoginRequiredMixin, UpdateView):
         'last_name',
         'photo',
         'birthdate',
-        'birthdate_alert',
         'anniversary',
         'anniversary_alert',
         'is_checked',

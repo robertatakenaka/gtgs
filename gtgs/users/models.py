@@ -40,12 +40,12 @@ def parse_month_day(month_day=None):
 def select_by_month_day(datename, m, d):
     if d + m == 0:
         if datename == 'birthdate':
-            return User.objects.filter(is_checked_by_admin=True, birthdate_alert=True)
+            return User.objects.filter(is_checked_by_admin=True)
         return User.objects.filter(is_checked_by_admin=True, anniversary_alert=True)
     if datename == 'birthdate':
         if d == 0:
-            return User.objects.filter(is_checked_by_admin=True, birthdate_alert=True, birthdate__month=m)
-        return User.objects.filter(is_checked_by_admin=True, birthdate_alert=True, birthdate__month=m, birthdate__day=d)
+            return User.objects.filter(is_checked_by_admin=True, birthdate__month=m)
+        return User.objects.filter(is_checked_by_admin=True, birthdate__month=m, birthdate__day=d)
     elif datename == 'anniversary':
         if d == 0:
             return User.objects.filter(is_checked_by_admin=True, anniversary_alert=True, anniversary__month=m)
@@ -74,7 +74,6 @@ class User(AbstractUser):
     is_checked = models.BooleanField(_('Confirmo que estes dados estão atualizados'), default=False)
     is_checked_by_admin = models.BooleanField(_('Validado'), default=False)
     anniversary_alert = models.BooleanField(_('Alertar tempo de SciELO'), default=True)
-    birthdate_alert = models.BooleanField(_('Alertar aniversário'), default=True)
 
     def __str__(self):
         return self.username

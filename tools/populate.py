@@ -48,7 +48,6 @@ def format_register(id, username, birthdate, anniversary, photo):
     fields['name'] = ''
     fields['birthdate'] = birthdate.isoformat()[:10]
     fields['anniversary'] = anniversary.isoformat()[:10]
-    fields['birthdate_alert'] = True
     fields['anniversary_alert'] = True
     fields['photo'] = photo
     fields['is_checked'] = False
