@@ -29,6 +29,11 @@ EMAIL_PORT = 1025
 
 EMAIL_HOST = env('EMAIL_HOST', default='mailhog')
 
+EMAIL_DESTINATION = env('EMAIL_DESTINATION', default='')
+DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL',
+                         default='Greetings! <noreply@example.com>')
+
+
 
 # CACHING
 # ------------------------------------------------------------------------------
@@ -77,3 +82,4 @@ CELERY_ALWAYS_EAGER = True
 # Your local stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['example.com', '0.0.0.0'])
+

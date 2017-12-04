@@ -13,7 +13,7 @@ template_html = 'users/msg_card.html'
 
 def send_absence_of_message(date, greetings):
     send_reminder_email(
-        settings.EMAIL_ADMIN,
+        settings.DJANGO_DEFAULT_FROM_EMAIL,
         date + ' ' + greetings,
         date + ' ' + greetings)
 
@@ -32,7 +32,7 @@ def send_greetings(subject, greetings, user):
     text_message = render_to_string(template_text, context)
 
     send_reminder_email_with_embedded_images(
-        settings.EMAIL_DESTINATARY,
+        settings.EMAIL_DESTINATION,
         subject,
         text_message,
         html_message,

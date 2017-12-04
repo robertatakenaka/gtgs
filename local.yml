@@ -16,10 +16,12 @@ services:
       - .:/app
       - ./data/media:/app/media
     environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
       - POSTGRES_USER=gtgs
       - USE_DOCKER=yes
-      - EMAIL_DESTINATARY=roberta.takenaka@scielo.org
-      - EMAIL_ADMIN=roberta.takenaka@scielo.org
+      - DJANGO_DEFAULT_FROM_EMAIL=roberta.takenaka@scielo.org
+      - EMAIL_DESTINATION=roberta.takenaka@scielo.org
     ports:
       - "8000:8000"
     command: /start.sh
@@ -38,7 +40,6 @@ services:
     image: mailhog/mailhog:v1.0.0
     ports:
       - "8025:8025"
-
 
   redis:
     image: redis:3.0
