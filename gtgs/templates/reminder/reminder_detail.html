@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Lembrete: {{ object.name }}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>{{ object.name }}</h2>
+      {% if object.email_to %}
+        <p><strong>E-mail para:</strong> {{ object.email_to }}</p>
+      {% endif %}
+      {% if object.email_from %}
+        <p><strong>E-mail de:</strong> {{ object.email_from }}</p>
+      {% endif %}
+      {% if object.is_active %}
+        <p><strong>Ativo: </strong>{{ object.is_active }}</p>
+      {% endif %}
+      {% if object.hour %}
+        <p><strong>Horário: </strong>{{ object.hour }}</p>
+      {% endif %}
+      
+    </div>
+  </div>
+
+{% endblock content %}
+

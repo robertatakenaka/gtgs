@@ -84,7 +84,7 @@ class User(AbstractUser):
     def fullname(self):
         if all([self.first_name, self.last_name]):
             if self.first_name + self.last_name != '':
-                return  ' '.join([self.first_name, self.last_name])
+                return ' '.join([self.first_name, self.last_name])
         if self.email != '':
             return self.email[:self.email.find('@')].replace('.', ' ').title()
         if self.username:

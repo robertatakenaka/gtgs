@@ -28,6 +28,20 @@ text = """
 'user_permissions': []}},
 """
 
+def format_reminder_register(id, name):
+    model = {}
+    model['model'] = 'reminder.reminder'
+    model['pk'] = id
+    fields = {}
+    fields['name'] = name
+    fields['email_from'] = 'roberta.takenaka@scielo.org'
+    fields['email_to'] = 'roberta.takenaka@scielo.org'
+    fields['is_active'] = False
+    fields['hour'] = 6
+    fields['default_date'] = '06-01'
+    model['fields'] = fields
+    return model
+
 
 def format_register(id, username, birthdate, anniversary, photo):
     model = {}
@@ -127,7 +141,6 @@ def format_data(username, u_data):
 i = 101
 j = []
 for username, u_data in data.items():
-    
     d = format_data(username, u_data)
     print(username)
     print(u_data)
@@ -136,7 +149,15 @@ for username, u_data in data.items():
     #d = format_data(username, u_data)
     #update_or_create(d, User)
 
-open('input.user.json', 'w').write(json.dumps(j))
+open('input.app.json', 'w').write(json.dumps(j))
+
+i = 1
+j = []
+for name in ['birthdate', 'anniversary']:
+    j.append(format_reminder_register(i, name))
+    i += 1
+
+open('input.app.json', 'a').write(json.dumps(j))
 
 
 # ./manage.py dumpdata 

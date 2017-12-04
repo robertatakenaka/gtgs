@@ -14,6 +14,7 @@ urlpatterns = [
 
     # User management
     url(r'^users/', include('gtgs.users.urls', namespace='users')),
+    url(r'^reminder/', include('reminder.urls', namespace='reminder')),
     url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here
