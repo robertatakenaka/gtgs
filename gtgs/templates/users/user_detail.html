@@ -4,6 +4,26 @@
 {% block title %}User: {{ object.username }}{% endblock %}
 
 {% block content %}
+    
+  {% if request.user.is_superuser %}
+  <h5>Gestão dos dados dos membros da Equipe</h5>
+  <div>
+    <nav class="navbar navbar-light" style="background-color: #C4BDB6;">
+      <!-- Navbar content -->
+      <ul class="nav justify-content-center">
+        <li class="active">
+          <a class="nav-link" href="{% url 'users:list' status=0 %}">Todos</a>          
+        </li>
+        <li>
+            <a class="nav-link" href="{% url 'users:list' status=1 %}">Cadastros incompletos</a>
+        </li>
+        <li>
+            <a class="nav-link" href="{% url 'users:list' status=2 %}">Validar cadastros</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
 
   <div class="row">
     <div class="col-sm-12">

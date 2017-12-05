@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}SciELO Team{% endblock %}
+
+{% block content %}
+  <h5>Gestão dos lembretes</h5>
+
+  <div class="container">
+    <div class="row">
+      {% for reminder in reminder_list %}
+        <div class="card-group">
+          <div class="card text-left" style="width:90rem;">
+              <h6 class="card-header">
+                  <a href="{% url 'reminder:update' reminder.name %}">
+                  {{ reminder.name }}
+                  </a>
+              </h6>
+              <div class="card-body">
+                <p class="card-text-bottom">
+                  <strong>E-mail from:</strong> {{reminder.email_from}}<br/>
+                  <strong>E-mail to:</strong> {{reminder.email_to}}<br/>
+                  <strong>Ativo:</strong> {{reminder.is_active}}<br/>
+                  <strong>Horário:</strong> {{reminder.hour}}<br/>
+                  <strong>Data default:</strong> {{reminder.default_date}}<br/>
+                   
+                </p>
+                
+              </div>
+              
+            </div>
+          </div>
+      {% endfor %}
+
+    </div>
+  </div>
+
+{% endblock content %}

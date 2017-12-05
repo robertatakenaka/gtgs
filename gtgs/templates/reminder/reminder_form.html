@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}{{ object.username }}{% endblock %}
+  
+{% block title %}{{ reminder.name }}{% endblock %}
 
 {% block content %}
-  
-  <h1>{{ object.username }}</h1>
-  <form class="form-horizontal" method="post" enctype="multipart/form-data" action="{% url 'users:update_dates' username=object.username %}">
+
+  <h1>{{ reminder.name }}</h1>
+  <form class="form-horizontal" method="post" enctype="multipart/form-data" action="{% url 'reminder:update' reminder.name %}">
     {% csrf_token %}
     {{ form|crispy }}
     <div class="control-group">

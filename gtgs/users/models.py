@@ -62,6 +62,10 @@ def user_ordered_by_month_day(datename, month_day=None):
             )
 
 
+def get_sysadmin_email():
+    return [user.email for user in User.objects.filter(is_superuser=True)]
+
+
 @python_2_unicode_compatible
 class User(AbstractUser):
 
@@ -84,7 +88,7 @@ class User(AbstractUser):
     def fullname(self):
         if all([self.first_name, self.last_name]):
             if self.first_name + self.last_name != '':
-                return  ' '.join([self.first_name, self.last_name])
+                return ' '.join([self.first_name, self.last_name])
         if self.email != '':
             return self.email[:self.email.find('@')].replace('.', ' ').title()
         if self.username:
