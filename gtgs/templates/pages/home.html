@@ -4,11 +4,13 @@
 <nav class="nav">
   <a class="nav-link" href="{% url 'users:birthday' %}">Aniversariantes</a>
   <a class="nav-link" href="{% url 'users:anniversary' %}">Tempo de SciELO</a>
-  {% if request.user.is_superuser %}
-  <a class="nav-link" href="{% url 'reminder:list' %}">Gestão dos lembretes</a>
-  <a class="nav-link" href="{% url 'users:list' status=0 %}">Gestão dos dados dos membros da Equipe</a>
-  {% endif %}
 </nav>
+{% if request.user.is_superuser %}
+    <nav class="nav">
+      <a class="nav-link" href="{% url 'users:list' status=0 %}">Gestão dos dados dos membros da Equipe</a>
+      <a class="nav-link" href="{% url 'reminder:list' %}">Gestão dos lembretes</a>
+    </nav>
+{% endif %}
 </div>
 
 

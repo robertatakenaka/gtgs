@@ -57,6 +57,7 @@ LOCAL_APPS = [
     'gtgs.users.apps.UsersConfig',
     # Your stuff: custom apps go here
     'reminder.apps.ReminderConfig',
+    'django_celery_beat',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

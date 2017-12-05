@@ -62,6 +62,10 @@ def user_ordered_by_month_day(datename, month_day=None):
             )
 
 
+def get_sysadmin_email():
+    return [user.email for user in User.objects.filter(is_superuser=True)]
+
+
 @python_2_unicode_compatible
 class User(AbstractUser):
 

@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
-
+  
 {% block title %}Lembrete: {{ object.name }}{% endblock %}
 
 {% block content %}
+  <div><a class="nav-link" href="{% url 'reminder:list' %}">Gestão dos lembretes</a></div>
 
   <div class="row">
     <div class="col-sm-12">
@@ -18,10 +19,6 @@
       {% if object.is_active %}
         <p><strong>Ativo: </strong>{{ object.is_active }}</p>
       {% endif %}
-      {% if object.hour %}
-        <p><strong>Horário: </strong>{{ object.hour }}</p>
-      {% endif %}
-      
     </div>
   </div>
 
