@@ -13,6 +13,9 @@
       {% if object.email_to %}
         <p><strong>E-mail para:</strong> {{ object.email_to }}</p>
       {% endif %}
+      {% if object.email_to_alt %}
+        <p><strong>E-mail para (alternativo):</strong> {{ object.email_to_alt }}</p>
+      {% endif %}
       {% if object.email_from %}
         <p><strong>E-mail de:</strong> {{ object.email_from }}</p>
       {% endif %}

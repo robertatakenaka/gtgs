@@ -33,11 +33,14 @@ GREETINGS = {
 }
 
 
-def send_absence_of_message(date, greetings):
+def send_absence_of_message(date, reminder):
+    email_to = reminder.email_to_alt
+    if '@' not in email_to:
+        email_to = get_sysadmin_email()
     send_reminder_email(
-        get_sysadmin_email(),
-        date + ' ' + greetings,
-        date + ' ' + greetings)
+        email_to,
+        date + ' ' + reminder.name,
+        date + ' ' + reminder.name)
 
 
 def send_greetings(email_to, greetings_function, user):
@@ -74,7 +77,7 @@ def remind_date(reminder):
     users = user_ordered_by_month_day(reminder.name, month_day)
     if len(users) == 0:
         logger.info("remind_date(): mensagem ninguem nesta data {}".format(month_day))
-        send_absence_of_message(month_day, reminder.name)
+        send_absence_of_message(month_day, reminder)
     else:
         for user in users:
             logger.info("remind_date(): mensagem para {} sobre {}".format(reminder.email_to, user.fullname))
