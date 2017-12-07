@@ -284,5 +284,3 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
-EMAIL_DESTINATARY = env('EMAIL_DESTINATARY', default='')
-EMAIL_ADMIN =  env('EMAIL_ADMIN', default='')

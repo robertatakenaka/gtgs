@@ -13,7 +13,12 @@ services:
     depends_on:
       - postgres
       - redis
-    env_file: .env
+    volumes:
+      - .:/app
+      - ./data/media:/app/media
+    env_file:
+      - .common.env
+      - .production.env
     command: /gunicorn.sh
 
   postgres:
@@ -23,7 +28,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
-    env_file: .env
+    env_file:
+      - .common.env
+      - .production.env
 
   caddy:
     build:
@@ -33,7 +40,8 @@ services:
       - django
     volumes:
       - caddy:/root/.caddy
-    env_file: .env
+    env_file:
+      - production.env
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
