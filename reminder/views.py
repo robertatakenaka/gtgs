@@ -30,6 +30,7 @@ class ReminderUpdateView(LoginRequiredMixin, UpdateView):
         'name',
         'email_from',
         'email_to',
+        'email_to_alt',
         'is_active',
         'default_date',
         ]

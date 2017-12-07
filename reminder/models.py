@@ -19,8 +19,8 @@ class Reminder(models.Model):
     name = models.CharField(_('Nome'), blank=False, max_length=255)
     email_from = models.EmailField(_('E-mail from'), blank=False)
     email_to = models.EmailField(_('E-mail para'), blank=False)
+    email_to_alt = models.EmailField(_('E-mail para (alternativo)'), blank=True)
     is_active = models.BooleanField(_('Ativo'), default=False)
-    hour = models.IntegerField(_('Hora'), default=6)
     default_date = models.CharField(_('Date (MM-DD)'), blank=True, max_length=5)
 
     def __str__(self):
