@@ -1,0 +1,126 @@
+version: '2'
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/app
+      - ./data/media:/app/media
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - DJANGO_ACCOUNT_ALLOW_REGISTRATION=True
+      - DJANGO_ALLOWED_HOSTS=*
+      - DJANGO_DEBUG=False
+      - DJANGO_DEFAULT_FROM_EMAIL=completar
+      - DJANGO_EMAIL_HOST=mailserver.foobar.scielo.org
+      - DJANGO_EMAIL_HOST_PASSWORD=foobarbaz1234
+      - DJANGO_EMAIL_HOST_USER=foobar
+      - DJANGO_EMAIL_PORT=1234
+      - DJANGO_EMAIL_SUBJECT_PREFIX=[\o/]
+      - DJANGO_EMAIL_USE_SSL=False
+      - DJANGO_EMAIL_USE_TLS=True
+      - DJANGO_SECRET_KEY=completar
+      - DJANGO_SECURE_SSL_REDIRECT=False
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - POSTGRES_HOST=completar
+      - POSTGRES_PASSWORD=completar
+      - POSTGRES_PORT=completar
+      - POSTGRES_USER=gtgs
+      - USE_DOCKER=yes
+    command: /gunicorn.sh
+
+  postgres:
+    image: postgres:9.6
+    restart: always
+    env_file:
+      - DJANGO_ACCOUNT_ALLOW_REGISTRATION=True
+      - DJANGO_ALLOWED_HOSTS=*
+      - DJANGO_DEBUG=False
+      - DJANGO_DEFAULT_FROM_EMAIL=completar
+      - DJANGO_EMAIL_HOST=mailserver.foobar.scielo.org
+      - DJANGO_EMAIL_HOST_PASSWORD=foobarbaz1234
+      - DJANGO_EMAIL_HOST_USER=foobar
+      - DJANGO_EMAIL_PORT=1234
+      - DJANGO_EMAIL_SUBJECT_PREFIX=[\o/]
+      - DJANGO_EMAIL_USE_SSL=False
+      - DJANGO_EMAIL_USE_TLS=True
+      - DJANGO_SECRET_KEY=completar
+      - DJANGO_SECURE_SSL_REDIRECT=False
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - POSTGRES_HOST=completar
+      - POSTGRES_PASSWORD=completar
+      - POSTGRES_PORT=completar
+      - POSTGRES_USER=gtgs
+      - USE_DOCKER=yes
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+
+  redis:
+    image: redis:3.0
+
+  celeryworker:
+    image: scieloorg/gtgs
+    user: django
+    restart: always
+    command: celery -A opac_ssm.taskapp worker -l INFO
+    environment:
+      - DJANGO_ACCOUNT_ALLOW_REGISTRATION=True
+      - DJANGO_ALLOWED_HOSTS=*
+      - DJANGO_DEBUG=False
+      - DJANGO_DEFAULT_FROM_EMAIL=completar
+      - DJANGO_EMAIL_HOST=mailserver.foobar.scielo.org
+      - DJANGO_EMAIL_HOST_PASSWORD=foobarbaz1234
+      - DJANGO_EMAIL_HOST_USER=foobar
+      - DJANGO_EMAIL_PORT=1234
+      - DJANGO_EMAIL_SUBJECT_PREFIX=[\o/]
+      - DJANGO_EMAIL_USE_SSL=False
+      - DJANGO_EMAIL_USE_TLS=True
+      - DJANGO_SECRET_KEY=completar
+      - DJANGO_SECURE_SSL_REDIRECT=False
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - POSTGRES_HOST=completar
+      - POSTGRES_PASSWORD=completar
+      - POSTGRES_PORT=completar
+      - POSTGRES_USER=gtgs
+      - USE_DOCKER=yes
+    volumes:
+      - .:/app
+      - ./data/media:/app/media
+      - /etc/localtime:/etc/localtime:ro
+
+  celerybeat:
+    image: scieloorg/gtgs
+    user: django
+    restart: always
+    command: celery -A opac_ssm.taskapp beat -l INFO
+    environment:
+      - DJANGO_ACCOUNT_ALLOW_REGISTRATION=True
+      - DJANGO_ALLOWED_HOSTS=*
+      - DJANGO_DEBUG=False
+      - DJANGO_DEFAULT_FROM_EMAIL=completar
+      - DJANGO_EMAIL_HOST=mailserver.foobar.scielo.org
+      - DJANGO_EMAIL_HOST_PASSWORD=foobarbaz1234
+      - DJANGO_EMAIL_HOST_USER=foobar
+      - DJANGO_EMAIL_PORT=1234
+      - DJANGO_EMAIL_SUBJECT_PREFIX=[\o/]
+      - DJANGO_EMAIL_USE_SSL=False
+      - DJANGO_EMAIL_USE_TLS=True
+      - DJANGO_SECRET_KEY=completar
+      - DJANGO_SECURE_SSL_REDIRECT=False
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - POSTGRES_HOST=completar
+      - POSTGRES_PASSWORD=completar
+      - POSTGRES_PORT=completar
+      - POSTGRES_USER=gtgs
+      - USE_DOCKER=yes
+    volumes:
+      - .:/app
+      - ./data/media:/app/media
+      - /etc/localtime:/etc/localtime:ro
+
