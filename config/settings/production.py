@@ -1,5 +1,5 @@
 """
-Production settings for Greetings! project.
+Production settings for Equipe project.
 
 - Use WhiteNoise for serving static files
 - Use Amazon's S3 for storing uploaded media
@@ -51,11 +51,11 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
     'DJANGO_SECURE_CONTENT_TYPE_NOSNIFF', default=True)
 SECURE_BROWSER_XSS_FILTER = True
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', default=True)
+SESSION_COOKIE_HTTPONLY = env.bool('SESSION_COOKIE_HTTPONLY', default=True)
 SECURE_SSL_REDIRECT = env.bool('DJANGO_SECURE_SSL_REDIRECT', default=True)
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', default=True)
+CSRF_COOKIE_HTTPONLY = env.bool('CSRF_COOKIE_HTTPONLY', default=True)
 X_FRAME_OPTIONS = 'DENY'
 
 # SITE CONFIGURATION
@@ -73,53 +73,19 @@ INSTALLED_APPS += ['gunicorn', ]
 # Uploaded Media Files
 # ------------------------
 # See: http://django-storages.readthedocs.io/en/latest/index.html
-"""
-INSTALLED_APPS += ['storages', ]
-
-
-AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME')
-AWS_AUTO_CREATE_BUCKET = True
-AWS_QUERYSTRING_AUTH = False
-
-# AWS cache settings, don't change unless you know what you're doing:
-AWS_EXPIRY = 60 * 60 * 24 * 7
-
-# TODO See: https://github.com/jschneier/django-storages/issues/47
-# Revert the following and use str after the above-mentioned bug is fixed in
-# either django-storage-redux or boto
-control = 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIRY, AWS_EXPIRY)
-AWS_HEADERS = {
-    'Cache-Control': bytes(control, encoding='latin-1')
-}
-
-# URL that handles the media served from MEDIA_ROOT, used for managing
-# stored files.
-MEDIA_URL = 'https://s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-"""
 
 
 # Static Assets
 # ------------------------
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # EMAIL
 # ------------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL',
-                         default='Greetings! <noreply@example.com>')
-EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[Greetings!]')
-SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
+                         default='Equipe <noreply@example.com>')
+EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[Equipe]')
+SERVER_EMAIL = env('DJANGO_EMAIL_HOST')
 
-# Anymail with Mailgun
-INSTALLED_APPS += ['anymail', ]
-ANYMAIL = {
-    'MAILGUN_API_KEY': env('DJANGO_MAILGUN_API_KEY'),
-    'MAILGUN_SENDER_DOMAIN': env('MAILGUN_SENDER_DOMAIN')
-}
-EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -135,8 +101,6 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
 
 # Use the Heroku-style specification
 # Raises ImproperlyConfigured exception if DATABASE_URL not in os.environ
-DATABASES['default'] = env.db('DATABASE_URL')
-DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=60)
 
 # CACHING
 # ------------------------------------------------------------------------------
@@ -213,7 +177,7 @@ RAVEN_CONFIG = {
 }
 
 # Custom Admin URL, use {% url 'admin:index' %}
-ADMIN_URL = env('DJANGO_ADMIN_URL')
+#ADMIN_URL = env('DJANGO_ADMIN_URL')
 
 # Your production stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------

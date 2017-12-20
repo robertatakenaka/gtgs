@@ -284,3 +284,13 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+# Mail settings
+# ------------------------------------------------------------------------------
+
+EMAIL_HOST = env("DJANGO_EMAIL_HOST", default='mailhog')
+EMAIL_PORT = env("DJANGO_EMAIL_PORT", default=1025)
+EMAIL_HOST_USER = env("DJANGO_EMAIL_HOST_USER", default='')
+EMAIL_HOST_PASSWORD = env("DJANGO_EMAIL_HOST_PASSWORD", default='')
+EMAIL_USE_TLS = env.bool("DJANGO_EMAIL_USE_TLS", default=True)
+EMAIL_USE_SSL = env.bool("DJANGO_EMAIL_USE_SSL", default=False)
+EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default='')

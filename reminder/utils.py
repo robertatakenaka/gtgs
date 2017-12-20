@@ -3,8 +3,9 @@ from django.template import Context
 from django.template.loader import render_to_string
 from celery.utils.log import get_task_logger
 from gtgs.users.models import user_ordered_by_month_day
-from gtgs.users.models import get_sysadmin_email
+from gtgs.users.models import get_sysadmin_users
 from .emails import send_reminder_email
+from .emails import normalize_email_to
 from .emails import send_reminder_email_with_embedded_images
 
 
@@ -27,20 +28,40 @@ def anniversary_greetings(user):
     return subject, greetings
 
 
+def no_greetings(user):
+    subject = 'No greetings'
+    greetings = 'No GREETINGS'
+    return subject, greetings
+
+
 GREETINGS = {
     'birthdate': birthdate_greetings,
     'anniversary': anniversary_greetings,
+    'none': no_greetings,
 }
 
 
 def send_absence_of_message(date, reminder):
+    logger.info("send_absence_of_message(): inicio: name={}".format(reminder.name))
     email_to = reminder.email_to_alt
-    if '@' not in email_to:
-        email_to = get_sysadmin_email()
-    send_reminder_email(
-        email_to,
-        date + ' ' + reminder.name,
-        date + ' ' + reminder.name)
+    logger.info("send_absence_of_message(): email_to={}".format(email_to))
+    sysadmin_users = get_sysadmin_users()
+    for user in sysadmin_users:
+        logger.info("send_absence_of_message(): user={}".format(user.email))
+        if '@' not in reminder.email_to_alt:
+            email_to = user.email
+        logger.info("send_absence_of_message(): email_to={}".format(email_to))
+        logger.info("send_absence_of_message(): email_to={}".format(date))
+        logger.info('send_absence_of_message(): emails={}'.format(normalize_email_to(email_to)))
+        logger.info('send_absence_of_message(): subj={}'.format(reminder.name))
+        logger.info('send_absence_of_message(): subj={}'.format(date))
+        send_reminder_email(
+            email_to,
+            date + ' ' + reminder.name,
+            date + ' ' + reminder.name)
+        logger.info("send_absence_of_message(): send_reminder_email {}".format(email_to))
+        send_greetings(email_to, no_greetings, user)
+        logger.info("send_absence_of_message(): send_greetings {}".format(email_to))
 
 
 def send_greetings(email_to, greetings_function, user):

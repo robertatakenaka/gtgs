@@ -102,6 +102,7 @@ class UserDatesUpdateView(LoginRequiredMixin, UpdateView):
     fields = [
         'first_name',
         'last_name',
+        'email',
         'photo',
         'birthdate',
         'anniversary',

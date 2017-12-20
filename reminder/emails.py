@@ -6,11 +6,19 @@ from django.template.loader import render_to_string
 from email.mime.image import MIMEImage
 
 
+def normalize_email_to(email_to):
+    email_to = email_to.replace(',', ';')
+    if ';' in email_to:
+        email_to = email_to.split(';')
+    if not isinstance(email_to, list):
+        email_to = [email_to]
+    return email_to
+
+
 def send_reminder_email(email_to, subject, message):
     c = Context({'email': email_to, 'message': message, 'subject': subject})
 
-    if not isinstance(email_to, list):
-        email_to = [email_to]
+    email_to = normalize_email_to(email_to)
 
     email_from = settings.DEFAULT_FROM_EMAIL
     email_subject = subject
@@ -26,8 +34,7 @@ def send_reminder_email(email_to, subject, message):
 def send_reminder_email_with_embedded_images(
         email_to, subject, text_message, html_message, images=None):
     images = images or []
-    if not isinstance(email_to, list):
-        email_to = [email_to]
+    email_to = normalize_email_to(email_to)
 
     msg = EmailMultiAlternatives(
             subject,
